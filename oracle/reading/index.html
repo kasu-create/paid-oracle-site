@@ -19,26 +19,16 @@
     <p class="pr-header__sub">まずはいまの悩みと、あなた（と必要なら相手）の生年月日をお書きください。カードはその情報を踏まえて引かれ、長文の鑑定文と「流れが動きやすい日」の目安をお届けします。</p>
   </header>
 
-  <p id="token-line" class="pr-token" aria-live="polite"></p>
-
   <ol class="pr-steps" aria-label="鑑定の流れ">
-    <li id="step-1" class="is-active">1. 悩み・生年月日</li>
-    <li id="step-2">2. 三枚</li>
-    <li id="step-3">3. 五枚</li>
-    <li id="step-4">4. 鑑定文</li>
+    <li id="step-1" class="is-active">悩み入力</li>
+    <li id="step-2">3枚</li>
+    <li id="step-3">5枚</li>
+    <li id="step-4">鑑定</li>
   </ol>
-
-  <div class="pr-log-wrap">
-    <h3>進行</h3>
-    <ul id="reading-log" aria-live="polite"></ul>
-  </div>
 
   <main id="pr-main" class="pr-main">
     <section id="phase-intro" class="pr-panel phase" data-phase="intro">
-      <h2>悩みとプロフィール</h2>
-      <p class="pr-panel__lead">
-        内容は鑑定文に反映されます。生年月日から年齢帯やライフステージのニュアンスを加え、相手の日付がある場合は関係性の読みも深めます。
-      </p>
+      <h2>いまの悩みを教えてください</h2>
 
       <div class="pr-form-grid">
         <label class="pr-field">
@@ -46,16 +36,10 @@
           <textarea id="concern" class="pr-textarea" rows="5" placeholder="仕事、恋愛、家族…できるだけ具体的に（2000文字以内）" maxlength="2000" required></textarea>
         </label>
 
-        <div class="pr-row-2">
-          <label class="pr-field">
-            <span>あなたの生年月日</span>
-            <input type="date" id="self-birth" class="pr-input-date" required />
-          </label>
-          <div class="pr-field">
-            <span>&nbsp;</span>
-            <p class="pr-hint">※鑑定の雰囲気づくりに使います。医療・法律の判断には使えません。</p>
-          </div>
-        </div>
+        <label class="pr-field">
+          <span>あなたの生年月日</span>
+          <input type="date" id="self-birth" class="pr-input-date" required />
+        </label>
 
         <label class="pr-check">
           <input type="checkbox" id="use-partner" />
@@ -67,7 +51,6 @@
             <span>相手の生年月日</span>
             <input type="date" id="partner-birth" class="pr-input-date" />
           </label>
-          <p class="pr-hint">未入力のままだと、一人称の鑑定中心になります。</p>
         </div>
       </div>
 
@@ -92,14 +75,10 @@
     </section>
 
     <section id="phase-summary" class="pr-panel phase is-hidden" data-phase="summary" hidden>
-      <h2>あなたへの鑑定文</h2>
-      <p class="pr-panel__lead">印刷やスクリーンショットで保存できます。日付はカードと入力情報から算出した<strong>目安</strong>です。</p>
+      <h2>あなたへの鑑定</h2>
       <div id="summary-body" class="summary-box"></div>
-      <a class="pr-back" href="../">販売ページへ戻る</a>
     </section>
   </main>
-
-  <p class="pr-footer-note">本サービスはエンターテインメントとしての参考情報です。重大な決断は専門家へご相談ください。</p>
 
   <script type="module" src="../../assets/js/reading.js"></script>
 </body>

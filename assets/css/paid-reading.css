@@ -105,13 +105,6 @@ body.paid-reading {
   }
 }
 
-.pr-token {
-  max-width: 52rem;
-  margin: 0.75rem auto 0;
-  padding: 0 var(--pr-safe-x);
-  font-size: 0.8rem;
-  color: var(--pr-muted);
-}
 
 /* ステップ：狭い画面は横スクロール（親指で一覧しやすい） */
 .pr-steps {
@@ -162,44 +155,6 @@ body.paid-reading {
   font-weight: 700;
 }
 
-.pr-log-wrap {
-  max-width: 52rem;
-  margin: 1rem auto 0;
-  padding: 0 var(--pr-safe-x);
-}
-
-.pr-log-wrap h3 {
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--pr-muted);
-  margin: 0 0 0.5rem;
-  letter-spacing: 0.12em;
-}
-
-#reading-log {
-  margin: 0;
-  padding: 0.65rem 0.85rem;
-  list-style: none;
-  background: var(--pr-bg-elevated);
-  border: 1px solid var(--pr-border);
-  border-radius: 10px;
-  font-size: 0.82rem;
-  color: var(--pr-muted);
-  max-height: 9rem;
-  overflow-y: auto;
-}
-
-#reading-log li {
-  padding: 0.2rem 0;
-  border-bottom: 1px solid rgba(61, 52, 41, 0.5);
-}
-#reading-log li:last-child {
-  border-bottom: 0;
-}
-#reading-log li.is-latest {
-  color: var(--pr-accent);
-}
 
 .pr-main {
   max-width: 52rem;

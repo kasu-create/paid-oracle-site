@@ -37,28 +37,7 @@ function showPhase(id) {
   setProgressStep(phaseToStep(id));
 }
 
-const timelineEl = () => document.getElementById("reading-log");
 
-function pushTimeline(message) {
-  const ul = timelineEl();
-  if (!ul) return;
-  ul.querySelectorAll(".is-latest").forEach((li) => li.classList.remove("is-latest"));
-  const li = document.createElement("li");
-  li.textContent = message;
-  li.classList.add("is-latest");
-  ul.appendChild(li);
-}
-
-function initTokenLine() {
-  const el = document.getElementById("token-line");
-  const token = getQueryParam("token");
-  if (!el) return;
-  if (token) {
-    el.textContent = `ご利用ID: ${token.slice(0, 6)}…（確認用）`;
-  } else {
-    el.textContent = "プレビュー表示（購入者専用URLではトークンが付きます）";
-  }
-}
 
 function fakeShuffleDelay(ms, statusEl, message, done) {
   if (statusEl) statusEl.textContent = message || "シャッフル中…";
@@ -236,18 +215,52 @@ function cardArcanaPhrase(card) {
 }
 
 /**
+ * カード1枚ごとの長文解説（6〜8段落）
  * @param {{ label: string, hint: string }} def
  * @param {import("./tarot-deck.js").TarotCard} card
  */
 function expandedCardParagraph(def, card, profile) {
   const m = getCardMeaning(card.id);
   const kw = (m.keywords || []).length ? m.keywords.join("、") : "静かな推移、内面的な調整";
-  const concernSnippet = profile.concern.trim().slice(0, 120);
-  const p1 = `${def.label}の位置に「${card.nameJa}」が現れました。キーワードの雰囲気は「${kw}」です。`;
-  const p2 = m.gist;
-  const p3 = `このカードは${cardArcanaPhrase(card)}で、あなたが書いてくださった悩み（${concernSnippet}${profile.concern.length > 120 ? "…" : ""}）に対して、「${def.hint}」という観点からメッセージを補強しています。`;
-  const p4 = `年齢帯のニュアンス（${ageBracketLabel(profile.age)}）を踏まえると、同じカードでも「焦らず土台を作くる」より「選択を狭めて集中する」など、優先すべき態度が変わります。いまの段階では、${def.label}を過度に完璧にしようとせず、小さな一歩で反応を見ながら整えるのが安全側です。`;
-  return `<p>${escapeHtml(p1)}</p><p>${escapeHtml(p2)}</p><p>${escapeHtml(p3)}</p><p>${escapeHtml(p4)}</p>`;
+  const concernSnippet = profile.concern.trim().slice(0, 150);
+  const arcanaType = cardArcanaPhrase(card);
+  const ageTip = ageBracketLabel(profile.age);
+
+  const paragraphs = [];
+
+  paragraphs.push(
+    `「${def.label}」の位置に「${card.nameJa}」が現れました。このカードが持つ雰囲気を一言で表すと「${kw}」です。タロットにおいて${arcanaType}に分類され、あなたの問いに対して特別な重みを持って応えています。`
+  );
+
+  paragraphs.push(m.gist);
+
+  paragraphs.push(
+    `あなたが「${concernSnippet}${profile.concern.length > 150 ? "…" : ""}」というテーマを持ち込んだとき、このカードは「${def.hint}」という角度から光を当てます。言い換えれば、今あなたが見落としがちな視点、あるいは無意識に避けている領域がここに映し出されています。`
+  );
+
+  paragraphs.push(
+    `年齢帯のニュアンス（${ageTip}）を重ねると、このカードの意味合いは少し変化します。若い時期であれば「試行錯誤を恐れずに動く」ことが示唆されますし、経験を重ねた時期であれば「過去の成功パターンに固執しすぎていないか」を問いかけています。いずれにせよ、「${def.label}」として出たこのカードは、あなたの現在地を正確に映す鏡です。`
+  );
+
+  paragraphs.push(
+    `実践的なアドバイスとしては、まず「${kw}」のキーワードを日常の中で意識してみてください。たとえば、仕事の場面では会議の発言、プライベートでは相手への声かけ——そこに「${card.nameJa}」のエネルギーを少しだけ取り入れるだけで、周囲の反応が変わり始めます。`
+  );
+
+  paragraphs.push(
+    `このカードが示す時間感覚は、急ぎすぎず、かといって停滞もしないバランスです。「${def.label}」のポジションは特に「いま何を優先すべきか」を教えてくれます。焦って結論を出すのではなく、1週間〜2週間ほど様子を見ながら、自分の感情の動きを観察してください。`
+  );
+
+  if (card.arcana === "major") {
+    paragraphs.push(
+      `大アルカナである「${card.nameJa}」が出たということは、この問題があなたの人生全体のテーマと深く結びついている可能性があります。単なる一時的な悩みではなく、長期的な成長の課題として捉えると、対処の仕方も変わってくるでしょう。`
+    );
+  } else {
+    paragraphs.push(
+      `小アルカナの「${card.nameJa}」は、日常レベルでの具体的なヒントを与えています。大きな決断というよりも、毎日の小さな選択——返信のタイミング、言葉の選び方、行動の優先順位——に意識を向けることで、状況は着実に動き出します。`
+    );
+  }
+
+  return paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("");
 }
 
 function partnerSection(profile) {
@@ -279,30 +292,50 @@ function synthesisSection(profile, threeCards, fiveCards) {
   const s1 = threeCards[1];
   const s2 = threeCards[2];
   const f0 = fiveCards[0];
+  const f1 = fiveCards[1];
   const f2 = fiveCards[2];
   const f3 = fiveCards[3];
   const f4 = fiveCards[4];
   const names = (c) => (c ? c.nameJa : "—");
   const concern = profile.concern.trim();
-  const lead = `いまのあなたは、${concern.slice(0, 200)}${concern.length > 200 ? "…" : ""}というテーマを抱えながら、内側では「${names(
-    s0
-  )}」のエネルギー（現状）、外側の壁として「${names(s1)}」、そして突破口として「${names(
-    s2
-  )}」が重なっています。`;
-  const deep = `深い層では核心に「${names(
-    f0
-  )}」が立ち、近い未来の動きに「${names(
-    f2
-  )}」が重なります。全体のまとめの示唆は「${names(
-    f4
-  )}」です。つまり、感情の揺れを否定せず、まずは${SPREAD_THREE[1].label}で示された課題を小さく分解し、${SPREAD_FIVE[3].label}として「${names(
-    f3
-  )}」の立ち位置を意識すると、流れが噛み合いやすくなります。`;
-  const action = `具体的には、(1) 週に一度だけ「事実」と「感情」を分けて書き出す、(2) 相手がいる場合は要望ではなく「してほしいこと1つ」に絞って伝える、(3) 決断を急がず、次に示す目安日の前後で様子を見る、の3点が有効です。`;
-  const partnerExtra = profile.partnerBirth
-    ? "相手の生年月日を入れているので、「一方通行の努力」になりやすい箇所を、対話のテーマとして先に持ち出すと改善が早いです。"
-    : "相手の日付が未入力のため、主にあなた自身の内面と行動面から読み解いています。";
-  return `<section class="pr-sec"><h3>深読み — あなた（たち）に合わせた指針</h3><p>${escapeHtml(lead)}</p><p>${escapeHtml(deep)}</p><p>${escapeHtml(action + partnerExtra)}</p></section>`;
+
+  const paragraphs = [];
+
+  paragraphs.push(
+    `いまのあなたは「${concern.slice(0, 200)}${concern.length > 200 ? "…" : ""}」というテーマを抱えています。3枚スプレッドで見ると、内側では「${names(s0)}」のエネルギーが流れ、外側には「${names(s1)}」という壁や課題があり、そこを突破するカギとして「${names(s2)}」が示されました。`
+  );
+
+  paragraphs.push(
+    `5枚スプレッドはさらに深い層を掘り下げます。核心には「${names(f0)}」が鎮座しており、これはあなたの問題の根っこにある感情やパターンを象徴しています。見えにくい要素として「${names(f1)}」が浮かび上がりました。これは無意識に避けていること、あるいは「まだ気づいていないが、実はとても重要な要因」を指しています。`
+  );
+
+  paragraphs.push(
+    `近い動きとして「${names(f2)}」が出ています。これは今後2〜3週間から1ヶ月ほどの間に起こりやすい変化の兆しです。取るとよい態度は「${names(f3)}」——このカードが示す姿勢を意識的に取り入れることで、流れに乗りやすくなります。そして全体のまとめとして「${names(f4)}」が現れました。これがこの鑑定全体を通して伝えたいメッセージの核です。`
+  );
+
+  paragraphs.push(
+    `8枚のカードを総合すると、あなたにとって大切なのは「感情の揺れを否定しないこと」と「小さく分解して取り組むこと」です。${SPREAD_THREE[1].label}で示された「${names(s1)}」の課題は、一度に解決しようとすると挫折しやすい。だからこそ、${SPREAD_FIVE[3].label}の「${names(f3)}」が示す立ち位置——受け止め方や態度——を意識しながら、一つずつ向き合っていきましょう。`
+  );
+
+  paragraphs.push(
+    `具体的なアクションとしては、次の3点をおすすめします。(1) 週に一度、「事実」と「感情」を分けて紙に書き出す。これだけで頭の中が整理され、次の一手が見えやすくなります。(2) 相手がいる場合は、要望を並べるのではなく「一番してほしいこと1つ」に絞って伝える。複数の要望は相手を混乱させるだけです。(3) 決断を急がない。後で示す目安の日付の前後1週間を「様子見の期間」として設け、自分の気持ちと周囲の反応を観察してください。`
+  );
+
+  if (profile.partnerBirth) {
+    paragraphs.push(
+      `相手の生年月日を入力いただいたので、お二人の関係性についても補足します。「一方通行の努力」になりやすい箇所がないか振り返ってみてください。自分だけが頑張っている感覚があるなら、それを対話のテーマとして先に持ち出すと、改善のスピードが上がります。相手も同じように感じている可能性があり、言葉にすることで初めて共有できる課題があるはずです。`
+    );
+  } else {
+    paragraphs.push(
+      `相手の生年月日は未入力のため、主にあなた自身の内面と行動面を中心に読み解きました。もし今後パートナーとの関係について掘り下げたいときは、再度お越しいただき、相手の情報も入力してみてください。二人の生年月日から、関係性のヒントをより具体的にお伝えできます。`
+    );
+  }
+
+  paragraphs.push(
+    `最後に、この鑑定で伝えたいのは「あなたは一人で抱え込まなくていい」ということです。カードは道しるべであり、最終的な選択をするのはあなた自身です。今日得た気づきを小さな行動に変え、少しずつ前に進んでください。応援しています。`
+  );
+
+  return `<section class="pr-sec"><h3>総合メッセージ</h3>${paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("")}</section>`;
 }
 
 function datesSection(milestones) {
@@ -312,7 +345,7 @@ function datesSection(milestones) {
         `<li><strong>${escapeHtml(m.dateStr)}</strong> — ${escapeHtml(m.label)}。この前後1週間を「様子を見て微調整する期間」としてください。</li>`
     )
     .join("");
-  return `<section class="pr-sec"><h3>流れが来やすい時期の目安（具体日付）</h3><p>以下は、カードの並びとご入力内容から算出した<strong>娯楽・内省用の目安</strong>です。確約の予言ではありません。</p><ul class="pr-date-list">${items}</ul></section>`;
+  return `<section class="pr-sec"><h3>流れが来やすい時期</h3><p>以下は、カードの並びとご入力内容から算出した目安です。</p><ul class="pr-date-list">${items}</ul></section>`;
 }
 
 /**
@@ -330,26 +363,24 @@ function buildReadingHtml(profile, threeCards, fiveCards) {
 
   const milestones = deriveMilestoneDates(seedStr);
 
-  let cardsHtml = '<section class="pr-sec"><h3>カードの意味（位置ごとの解説）</h3>';
+  let cardsHtml = "";
+  cardsHtml += '<section class="pr-sec"><h3>3枚スプレッド — 現状・障害・アドバイス</h3>';
   SPREAD_THREE.forEach((def, i) => {
     const card = threeCards[i];
     if (!card) return;
-    cardsHtml += `<div class="pr-card-block"><div class="pr-card-block__title">3枚：${escapeHtml(def.label)} — ${escapeHtml(card.nameJa)}</div><div class="pr-card-block__sub">${escapeHtml(def.hint)}</div>${expandedCardParagraph(def, card, profile)}</div>`;
-  });
-  SPREAD_FIVE.forEach((def, i) => {
-    const card = fiveCards[i];
-    if (!card) return;
-    cardsHtml += `<div class="pr-card-block"><div class="pr-card-block__title">5枚：${escapeHtml(def.label)} — ${escapeHtml(card.nameJa)}</div><div class="pr-card-block__sub">${escapeHtml(def.hint)}</div>${expandedCardParagraph(def, card, profile)}</div>`;
+    cardsHtml += `<div class="pr-card-block"><div class="pr-card-block__title">${escapeHtml(def.label)}：${escapeHtml(card.nameJa)}</div>${expandedCardParagraph(def, card, profile)}</div>`;
   });
   cardsHtml += "</section>";
 
-  const inputBlock = `<section class="pr-sec"><h3>ご入力内容の要約</h3><p><strong>悩み・質問：</strong>${escapeHtml(profile.concern.trim())}</p><p><strong>あなたの生年月日：</strong>${escapeHtml(
-    profile.selfBirth || "（未入力）"
-  )}（年齢目安: ${profile.age != null ? escapeHtml(String(profile.age)) + "歳" : "—"}）</p>${
-    profile.partnerBirth
-      ? `<p><strong>相手の生年月日：</strong>${escapeHtml(profile.partnerBirth)}</p>`
-      : "<p><strong>相手の生年月日：</strong>未入力（一人称中心の読み）</p>"
-  }</section>`;
+  cardsHtml += '<section class="pr-sec"><h3>5枚スプレッド — 核心から示唆まで</h3>';
+  SPREAD_FIVE.forEach((def, i) => {
+    const card = fiveCards[i];
+    if (!card) return;
+    cardsHtml += `<div class="pr-card-block"><div class="pr-card-block__title">${escapeHtml(def.label)}：${escapeHtml(card.nameJa)}</div>${expandedCardParagraph(def, card, profile)}</div>`;
+  });
+  cardsHtml += "</section>";
+
+  const inputBlock = "";
 
   const html =
     `<div class="pr-reading-root">` +
@@ -358,7 +389,7 @@ function buildReadingHtml(profile, threeCards, fiveCards) {
     partnerSection(profile) +
     synthesisSection(profile, threeCards, fiveCards) +
     datesSection(milestones) +
-    `<p class="pr-disclaimer">本鑑定はエンターテインメントです。医療・法律・投資などの決定は専門家へご相談ください。日付はアルゴリズムによる目安であり、結果を保証するものではありません。</p></div>`;
+`</div>`;
 
   return html;
 }
@@ -451,7 +482,6 @@ function wireButtons() {
       state.three = state.pile.splice(0, 3);
       state.five = [];
       renderSpread(document.getElementById("spread-three"), SPREAD_THREE, state.three);
-      pushTimeline(`3枚を引きました · ${state.three.map((c) => c.nameJa).join("、")}`);
       showPhase("phase-three");
     });
   });
@@ -462,7 +492,6 @@ function wireButtons() {
       state.pile = shuffleDeck(state.pile);
       state.five = state.pile.splice(0, 5);
       renderSpread(document.getElementById("spread-five"), SPREAD_FIVE, state.five);
-      pushTimeline(`5枚を引きました · ${state.five.map((c) => c.nameJa).join("、")}`);
       showPhase("phase-five");
     });
   });
@@ -472,13 +501,10 @@ function wireButtons() {
     const html = buildReadingHtml(profile, state.three, state.five);
     const box = document.getElementById("summary-body");
     if (box) box.innerHTML = html;
-    pushTimeline("鑑定文を表示しました");
     showPhase("phase-summary");
   });
 }
 
-initTokenLine();
 wirePartnerToggle();
-pushTimeline("セッション開始 · フルデッキ " + buildFullDeck().length + " 枚");
 showPhase("phase-intro");
 wireButtons();
