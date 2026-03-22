@@ -323,19 +323,19 @@ function synthesisSection(profile, threeCards, fiveCards) {
 
   if (profile.partnerBirth) {
     paragraphs.push(
-      `相手の生年月日を入力いただいたので、お二人の関係性についても補足します。「一方通行の努力」になりやすい箇所がないか振り返ってみてください。自分だけが頑張っている感覚があるなら、それを対話のテーマとして先に持ち出すと、改善のスピードが上がります。相手も同じように感じている可能性があり、言葉にすることで初めて共有できる課題があるはずです。`
+      `あの人の生年月日も入れてくれたから、ふたりの関係性についても見てみたよ。「自分だけが頑張ってる」って感じること、ない？もしあるなら、それを言葉にして伝えてみて。相手も同じように感じてることがあるかもしれないし、話すことで初めて共有できる課題ってあるからね。`
     );
   } else {
     paragraphs.push(
-      `相手の生年月日は未入力のため、主にあなた自身の内面と行動面を中心に読み解きました。もし今後パートナーとの関係について掘り下げたいときは、再度お越しいただき、相手の情報も入力してみてください。二人の生年月日から、関係性のヒントをより具体的にお伝えできます。`
+      `あの人の生年月日は入ってないから、今回はあなた自身の気持ちや行動を中心に読んだよ。もしふたりの相性とかもっと深く知りたくなったら、また来てね。あの人の情報も入れてくれたら、関係性のヒントをもっと具体的に伝えられるから。`
     );
   }
 
   paragraphs.push(
-    `最後に、この鑑定で伝えたいのは「あなたは一人で抱え込まなくていい」ということです。カードは道しるべであり、最終的な選択をするのはあなた自身です。今日得た気づきを小さな行動に変え、少しずつ前に進んでください。応援しています。`
+    `最後にれんから伝えたいのは、「ひとりで抱え込まなくていいよ」ってこと。カードは道しるべ。最終的に選ぶのはあなた自身だけど、今日のカードが少しでもヒントになったら嬉しいな。小さな一歩でいいから、動いてみてね。応援してるよ。`
   );
 
-  return `<section class="pr-sec"><h3>総合メッセージ</h3>${paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("")}</section>`;
+  return `<section class="pr-sec"><h3>れんからのまとめ</h3>${paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("")}</section>`;
 }
 
 function datesSection(milestones) {
@@ -397,8 +397,7 @@ function buildReadingHtml(profile, threeCards, fiveCards) {
 function readProfileFromDom() {
   const concern = document.getElementById("concern")?.value || "";
   const selfBirth = document.getElementById("self-birth")?.value || "";
-  const usePartner = document.getElementById("use-partner")?.checked;
-  const partnerBirth = usePartner ? document.getElementById("partner-birth")?.value || "" : "";
+  const partnerBirth = document.getElementById("partner-birth")?.value || "";
   return {
     concern,
     selfBirth,
@@ -424,17 +423,6 @@ function validateIntro(profile, setError) {
     setError("生年月日の形式が正しくありません。");
     return false;
   }
-  const usePartner = document.getElementById("use-partner")?.checked;
-  if (usePartner) {
-    if (!profile.partnerBirth) {
-      setError("相手の生年月日を入力する場合は、日付を選んでください。");
-      return false;
-    }
-    if (!parseISODate(profile.partnerBirth)) {
-      setError("相手の生年月日の形式が正しくありません。");
-      return false;
-    }
-  }
   setError("");
   return true;
 }
@@ -446,18 +434,6 @@ const state = {
   profile: null,
 };
 
-function wirePartnerToggle() {
-  const cb = document.getElementById("use-partner");
-  const fields = document.getElementById("partner-fields");
-  const input = document.getElementById("partner-birth");
-  if (!cb || !fields) return;
-  const sync = () => {
-    fields.hidden = !cb.checked;
-    if (!cb.checked && input) input.value = "";
-  };
-  cb.addEventListener("change", sync);
-  sync();
-}
 
 function wireButtons() {
   const btnStart = document.getElementById("btn-start");
@@ -505,6 +481,5 @@ function wireButtons() {
   });
 }
 
-wirePartnerToggle();
 showPhase("phase-intro");
 wireButtons();

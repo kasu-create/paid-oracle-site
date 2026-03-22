@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0c0b0a" />
   <meta name="color-scheme" content="dark" />
-  <title>有料オラクル鑑定｜3枚＋5枚</title>
+  <title>れんの恋愛タロット</title>
   <meta name="robots" content="noindex,nofollow" />
-  <meta name="description" content="悩みと生年月日を踏まえたタロット鑑定。78枚から3枚・5枚を引き、長文の鑑定文と時期の目安を表示します。" />
+  <meta name="description" content="れんがあなたの恋愛を占います。悩みと生年月日からカードを引き、ふたりの関係性と動きやすい時期をお届けします。" />
   <link rel="stylesheet" href="../../assets/css/paid-reading.css" />
 </head>
 <body class="paid-reading">
   <a class="pr-skip" href="#pr-main">本文へスキップ</a>
 
   <header class="pr-header">
-    <p class="pr-header__badge">PAID READING</p>
-    <h1 class="pr-header__title">有料オラクル鑑定</h1>
-    <p class="pr-header__sub">まずはいまの悩みと、あなた（と必要なら相手）の生年月日をお書きください。カードはその情報を踏まえて引かれ、長文の鑑定文と「流れが動きやすい日」の目安をお届けします。</p>
+    <p class="pr-header__badge">REN'S TAROT</p>
+    <h1 class="pr-header__title">れんの恋愛タロット</h1>
+    <p class="pr-header__sub">いまの恋の悩みと、あなた（と気になるあの人）の生年月日を教えてね。カードを引いて、ふたりのこれからと「動きやすい日」を読み解くよ。</p>
   </header>
 
   <ol class="pr-steps" aria-label="鑑定の流れ">
@@ -28,12 +28,12 @@
 
   <main id="pr-main" class="pr-main">
     <section id="phase-intro" class="pr-panel phase" data-phase="intro">
-      <h2>いまの悩みを教えてください</h2>
+      <h2>いまの恋の悩みを教えて</h2>
 
       <div class="pr-form-grid">
         <label class="pr-field">
-          <span>いまの悩み・聞きたいこと</span>
-          <textarea id="concern" class="pr-textarea" rows="5" placeholder="仕事、恋愛、家族…できるだけ具体的に（2000文字以内）" maxlength="2000" required></textarea>
+          <span>恋の悩み・聞きたいこと</span>
+          <textarea id="concern" class="pr-textarea" rows="5" placeholder="好きな人のこと、関係性、気持ちの確かめ方…なんでも書いてね" maxlength="2000" required></textarea>
         </label>
 
         <label class="pr-field">
@@ -41,17 +41,10 @@
           <input type="date" id="self-birth" class="pr-input-date" required />
         </label>
 
-        <label class="pr-check">
-          <input type="checkbox" id="use-partner" />
-          <span>相手（パートナー・気になる方など）の生年月日も入力する</span>
+        <label class="pr-field">
+          <span>気になるあの人の生年月日</span>
+          <input type="date" id="partner-birth" class="pr-input-date" />
         </label>
-
-        <div id="partner-fields" class="pr-field" hidden>
-          <label>
-            <span>相手の生年月日</span>
-            <input type="date" id="partner-birth" class="pr-input-date" />
-          </label>
-        </div>
       </div>
 
       <p id="form-error" class="pr-error" role="alert" aria-live="assertive"></p>
@@ -60,22 +53,22 @@
     </section>
 
     <section id="phase-three" class="pr-panel phase is-hidden" data-phase="three" hidden>
-      <h2>三枚の鑑定</h2>
-      <p class="pr-panel__lead">現状・障害・アドバイスの三つの視点です。</p>
+      <h2>3枚のカード</h2>
+      <p class="pr-panel__lead">いまの状況・壁になっているもの・乗り越えるヒント、の3つだよ。</p>
       <div id="spread-three" class="spread-row" role="list"></div>
       <button type="button" class="pr-btn" id="btn-to-five">残りをシャッフルして 5枚を引く</button>
       <p id="shuffle-five" class="pr-shuffle-msg" aria-live="polite"></p>
     </section>
 
     <section id="phase-five" class="pr-panel phase is-hidden" data-phase="five" hidden>
-      <h2>五枚の鑑定</h2>
-      <p class="pr-panel__lead">核心からまとめの示唆まで、五つの位置で読み解きます。</p>
+      <h2>5枚のカード</h2>
+      <p class="pr-panel__lead">もっと深いところまで読み解いていくね。</p>
       <div id="spread-five" class="spread-row" role="list"></div>
       <button type="button" class="pr-btn" id="btn-finish">鑑定文を表示する</button>
     </section>
 
     <section id="phase-summary" class="pr-panel phase is-hidden" data-phase="summary" hidden>
-      <h2>あなたへの鑑定</h2>
+      <h2>れんからのメッセージ</h2>
       <div id="summary-body" class="summary-box"></div>
     </section>
   </main>
