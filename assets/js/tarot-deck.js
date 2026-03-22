@@ -1,7 +1,7 @@
 /**
  * ライダー版準拠・78枚フルデッキ（日本語名）
  * 鑑定文案は別ファイル: card-meanings.js（getCardMeaning(card.id)）
- * 画像は未使用。UIは CSS カードで表示。
+ * 画像は assets/cards/{id}.webp|png|jpg（card-images.js 参照）。未配置時は記号表示。
  */
 
 const MAJOR = [

@@ -2,95 +2,104 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>oracle-reading · Reading</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0c0b0a" />
+  <meta name="color-scheme" content="dark" />
+  <title>有料オラクル鑑定｜3枚＋5枚</title>
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="../../assets/css/github-workspace.css" />
+  <meta name="description" content="悩みと生年月日を踏まえたタロット鑑定。78枚から3枚・5枚を引き、長文の鑑定文と時期の目安を表示します。" />
+  <link rel="stylesheet" href="../../assets/css/paid-reading.css" />
 </head>
-<body class="gh-workspace">
-  <header class="gh-topbar" role="banner">
-    <span class="gh-topbar__mark" aria-hidden="true">⌘</span>
-    <span class="gh-topbar__title">GitHub<span class="gh-topbar__badge">風ワークスペース</span></span>
-    <span class="gh-topbar__fill"></span>
-    <span class="gh-topbar__hint">paid-oracle-site</span>
+<body class="paid-reading">
+  <a class="pr-skip" href="#pr-main">本文へスキップ</a>
+
+  <header class="pr-header">
+    <p class="pr-header__badge">PAID READING</p>
+    <h1 class="pr-header__title">有料オラクル鑑定</h1>
+    <p class="pr-header__sub">まずはいまの悩みと、あなた（と必要なら相手）の生年月日をお書きください。カードはその情報を踏まえて引かれ、長文の鑑定文と「流れが動きやすい日」の目安をお届けします。</p>
   </header>
 
-  <div class="gh-repo-bar">
-    <span class="gh-repo-bar__path">
-      <strong>you</strong> / <strong>oracle-reading</strong>
-    </span>
-    <span class="gh-repo-bar__pill">Private</span>
-    <span class="gh-repo-bar__pill">Custom domain</span>
-    <span class="gh-repo-bar__pill">/oracle/reading/</span>
+  <p id="token-line" class="pr-token" aria-live="polite"></p>
+
+  <ol class="pr-steps" aria-label="鑑定の流れ">
+    <li id="step-1" class="is-active">1. 悩み・生年月日</li>
+    <li id="step-2">2. 三枚</li>
+    <li id="step-3">3. 五枚</li>
+    <li id="step-4">4. 鑑定文</li>
+  </ol>
+
+  <div class="pr-log-wrap">
+    <h3>進行</h3>
+    <ul id="reading-log" aria-live="polite"></ul>
   </div>
 
-  <nav class="gh-tabs" aria-label="リポジトリタブ">
-    <span class="gh-tab">Code</span>
-    <span class="gh-tab">Issues</span>
-    <span class="gh-tab" aria-selected="true">Reading</span>
-  </nav>
+  <main id="pr-main" class="pr-main">
+    <section id="phase-intro" class="pr-panel phase" data-phase="intro">
+      <h2>悩みとプロフィール</h2>
+      <p class="pr-panel__lead">
+        内容は鑑定文に反映されます。生年月日から年齢帯やライフステージのニュアンスを加え、相手の日付がある場合は関係性の読みも深めます。
+      </p>
 
-  <div class="gh-layout">
-    <aside class="gh-sidebar" aria-label="ファイルツリー">
-      <div class="gh-sidebar__label">Files</div>
-      <ul class="gh-tree">
-        <li>oracle/</li>
-        <li class="is-active">└ reading/index.html</li>
-        <li>└ index.html</li>
-        <li>assets/js/</li>
-        <li>└ tarot-deck.js</li>
-        <li>└ card-meanings.js</li>
-        <li>└ spread-config.js</li>
-        <li>└ reading.js</li>
-        <li>assets/css/</li>
-        <li>└ github-workspace.css</li>
-      </ul>
-    </aside>
-
-    <main class="gh-main">
-      <p id="token-line" class="token-line" aria-live="polite"></p>
-
-      <section id="phase-intro" class="gh-panel phase" data-phase="intro">
-        <h2 class="gh-panel__title">はじめに · session.open</h2>
-        <p class="gh-panel__desc">
-          デッキは <strong>78枚フル</strong>（<code>tarot-deck.js</code>）。本文は <code>card-meanings.js</code>。最初のシャッフル後に3枚、残りを再シャッフルして5枚を引きます（重複なし）。
-        </p>
-        <label class="gh-field">
-          <span>concern.md（任意）</span>
-          <textarea id="concern" class="gh-textarea" rows="4" placeholder="いまの状況や聞きたいこと…"></textarea>
+      <div class="pr-form-grid">
+        <label class="pr-field">
+          <span>いまの悩み・聞きたいこと</span>
+          <textarea id="concern" class="pr-textarea" rows="5" placeholder="仕事、恋愛、家族…できるだけ具体的に（2000文字以内）" maxlength="2000" required></textarea>
         </label>
-        <button type="button" class="gh-btn" id="btn-start">Shuffle &amp; 3-card pull</button>
-        <p id="shuffle-intro" class="shuffle-status" aria-live="polite"></p>
-      </section>
 
-      <section id="phase-three" class="gh-panel phase is-hidden" data-phase="three" hidden>
-        <h2 class="gh-panel__title">3-card spread · branch/feature-3</h2>
-        <p class="gh-panel__desc">スロット定義は <code>spread-config.js</code>（現状 / 障害 / アドバイス）。</p>
-        <div id="spread-three" class="spread-row" role="list"></div>
-        <button type="button" class="gh-btn" id="btn-to-five">Shuffle remainder &amp; 5-card pull</button>
-        <p id="shuffle-five" class="shuffle-status" aria-live="polite"></p>
-      </section>
+        <div class="pr-row-2">
+          <label class="pr-field">
+            <span>あなたの生年月日</span>
+            <input type="date" id="self-birth" class="pr-input-date" required />
+          </label>
+          <div class="pr-field">
+            <span>&nbsp;</span>
+            <p class="pr-hint">※鑑定の雰囲気づくりに使います。医療・法律の判断には使えません。</p>
+          </div>
+        </div>
 
-      <section id="phase-five" class="gh-panel phase is-hidden" data-phase="five" hidden>
-        <h2 class="gh-panel__title">5-card spread · branch/feature-5</h2>
-        <p class="gh-panel__desc">核心〜まとめの5ポジション。</p>
-        <div id="spread-five" class="spread-row" role="list"></div>
-        <button type="button" class="gh-btn" id="btn-finish">Generate summary</button>
-      </section>
+        <label class="pr-check">
+          <input type="checkbox" id="use-partner" />
+          <span>相手（パートナー・気になる方など）の生年月日も入力する</span>
+        </label>
 
-      <section id="phase-summary" class="gh-panel phase is-hidden" data-phase="summary" hidden>
-        <h2 class="gh-panel__title">SUMMARY.md</h2>
-        <p class="gh-panel__desc">本文は後からテンプレ差し替え・PDF出力に接続可能。</p>
-        <div id="summary-body" class="summary-box"></div>
-        <a class="gh-link-back" href="../">← oracle/index.html（LP）</a>
-      </section>
-    </main>
+        <div id="partner-fields" class="pr-field" hidden>
+          <label>
+            <span>相手の生年月日</span>
+            <input type="date" id="partner-birth" class="pr-input-date" />
+          </label>
+          <p class="pr-hint">未入力のままだと、一人称の鑑定中心になります。</p>
+        </div>
+      </div>
 
-    <aside class="gh-activity" aria-label="アクティビティ">
-      <div class="gh-activity__label">Activity</div>
-      <ul id="gh-timeline" class="gh-timeline"></ul>
-    </aside>
-  </div>
+      <p id="form-error" class="pr-error" role="alert" aria-live="assertive"></p>
+      <button type="button" class="pr-btn" id="btn-start">シャッフルして 3枚を引く</button>
+      <p id="shuffle-intro" class="pr-shuffle-msg" aria-live="polite"></p>
+    </section>
+
+    <section id="phase-three" class="pr-panel phase is-hidden" data-phase="three" hidden>
+      <h2>三枚の鑑定</h2>
+      <p class="pr-panel__lead">現状・障害・アドバイスの三つの視点です。</p>
+      <div id="spread-three" class="spread-row" role="list"></div>
+      <button type="button" class="pr-btn" id="btn-to-five">残りをシャッフルして 5枚を引く</button>
+      <p id="shuffle-five" class="pr-shuffle-msg" aria-live="polite"></p>
+    </section>
+
+    <section id="phase-five" class="pr-panel phase is-hidden" data-phase="five" hidden>
+      <h2>五枚の鑑定</h2>
+      <p class="pr-panel__lead">核心からまとめの示唆まで、五つの位置で読み解きます。</p>
+      <div id="spread-five" class="spread-row" role="list"></div>
+      <button type="button" class="pr-btn" id="btn-finish">鑑定文を表示する</button>
+    </section>
+
+    <section id="phase-summary" class="pr-panel phase is-hidden" data-phase="summary" hidden>
+      <h2>あなたへの鑑定文</h2>
+      <p class="pr-panel__lead">印刷やスクリーンショットで保存できます。日付はカードと入力情報から算出した<strong>目安</strong>です。</p>
+      <div id="summary-body" class="summary-box"></div>
+      <a class="pr-back" href="../">販売ページへ戻る</a>
+    </section>
+  </main>
+
+  <p class="pr-footer-note">本サービスはエンターテインメントとしての参考情報です。重大な決断は専門家へご相談ください。</p>
 
   <script type="module" src="../../assets/js/reading.js"></script>
 </body>
