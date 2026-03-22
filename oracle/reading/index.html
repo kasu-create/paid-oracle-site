@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>oracle-reading · Reading</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="../../assets/css/github-workspace.css" />
+</head>
+<body class="gh-workspace">
+  <header class="gh-topbar" role="banner">
+    <span class="gh-topbar__mark" aria-hidden="true">⌘</span>
+    <span class="gh-topbar__title">GitHub<span class="gh-topbar__badge">風ワークスペース</span></span>
+    <span class="gh-topbar__fill"></span>
+    <span class="gh-topbar__hint">paid-oracle-site</span>
+  </header>
+
+  <div class="gh-repo-bar">
+    <span class="gh-repo-bar__path">
+      <strong>you</strong> / <strong>oracle-reading</strong>
+    </span>
+    <span class="gh-repo-bar__pill">Private</span>
+    <span class="gh-repo-bar__pill">Custom domain</span>
+    <span class="gh-repo-bar__pill">/oracle/reading/</span>
+  </div>
+
+  <nav class="gh-tabs" aria-label="リポジトリタブ">
+    <span class="gh-tab">Code</span>
+    <span class="gh-tab">Issues</span>
+    <span class="gh-tab" aria-selected="true">Reading</span>
+  </nav>
+
+  <div class="gh-layout">
+    <aside class="gh-sidebar" aria-label="ファイルツリー">
+      <div class="gh-sidebar__label">Files</div>
+      <ul class="gh-tree">
+        <li>oracle/</li>
+        <li class="is-active">└ reading/index.html</li>
+        <li>└ index.html</li>
+        <li>assets/js/</li>
+        <li>└ tarot-deck.js</li>
+        <li>└ card-meanings.js</li>
+        <li>└ spread-config.js</li>
+        <li>└ reading.js</li>
+        <li>assets/css/</li>
+        <li>└ github-workspace.css</li>
+      </ul>
+    </aside>
+
+    <main class="gh-main">
+      <p id="token-line" class="token-line" aria-live="polite"></p>
+
+      <section id="phase-intro" class="gh-panel phase" data-phase="intro">
+        <h2 class="gh-panel__title">はじめに · session.open</h2>
+        <p class="gh-panel__desc">
+          デッキは <strong>78枚フル</strong>（<code>tarot-deck.js</code>）。本文は <code>card-meanings.js</code>。最初のシャッフル後に3枚、残りを再シャッフルして5枚を引きます（重複なし）。
+        </p>
+        <label class="gh-field">
+          <span>concern.md（任意）</span>
+          <textarea id="concern" class="gh-textarea" rows="4" placeholder="いまの状況や聞きたいこと…"></textarea>
+        </label>
+        <button type="button" class="gh-btn" id="btn-start">Shuffle &amp; 3-card pull</button>
+        <p id="shuffle-intro" class="shuffle-status" aria-live="polite"></p>
+      </section>
+
+      <section id="phase-three" class="gh-panel phase is-hidden" data-phase="three" hidden>
+        <h2 class="gh-panel__title">3-card spread · branch/feature-3</h2>
+        <p class="gh-panel__desc">スロット定義は <code>spread-config.js</code>（現状 / 障害 / アドバイス）。</p>
+        <div id="spread-three" class="spread-row" role="list"></div>
+        <button type="button" class="gh-btn" id="btn-to-five">Shuffle remainder &amp; 5-card pull</button>
+        <p id="shuffle-five" class="shuffle-status" aria-live="polite"></p>
+      </section>
+
+      <section id="phase-five" class="gh-panel phase is-hidden" data-phase="five" hidden>
+        <h2 class="gh-panel__title">5-card spread · branch/feature-5</h2>
+        <p class="gh-panel__desc">核心〜まとめの5ポジション。</p>
+        <div id="spread-five" class="spread-row" role="list"></div>
+        <button type="button" class="gh-btn" id="btn-finish">Generate summary</button>
+      </section>
+
+      <section id="phase-summary" class="gh-panel phase is-hidden" data-phase="summary" hidden>
+        <h2 class="gh-panel__title">SUMMARY.md</h2>
+        <p class="gh-panel__desc">本文は後からテンプレ差し替え・PDF出力に接続可能。</p>
+        <div id="summary-body" class="summary-box"></div>
+        <a class="gh-link-back" href="../">← oracle/index.html（LP）</a>
+      </section>
+    </main>
+
+    <aside class="gh-activity" aria-label="アクティビティ">
+      <div class="gh-activity__label">Activity</div>
+      <ul id="gh-timeline" class="gh-timeline"></ul>
+    </aside>
+  </div>
+
+  <script type="module" src="../../assets/js/reading.js"></script>
+</body>
+</html>
