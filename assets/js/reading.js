@@ -109,15 +109,6 @@ function renderCardElement(card) {
 
   article.appendChild(face);
   article.appendChild(nameEl);
-  article.appendChild(metaEl);
-
-  if (meaning?.gist) {
-    const g = document.createElement("div");
-    g.className = "tarot-card__gist";
-    g.title = "card-meanings.js";
-    g.textContent = meaning.gist;
-    article.appendChild(g);
-  }
 
   return article;
 }

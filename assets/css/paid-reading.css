@@ -338,23 +338,30 @@ body.paid-reading {
   margin: 0.75rem 0 0;
 }
 
-/* モバイルは1列で親指幅に合わせて大きめカード */
+/* モバイルは横スクロール、PCはグリッド */
 .spread-row {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin: 1rem 0 1.25rem;
+  display: flex;
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.5rem;
 }
 
-@media (min-width: 480px) {
+.spread-row > .spread-slot {
+  flex: 0 0 min(70vw, 220px);
+  scroll-snap-align: center;
+}
+
+@media (min-width: 600px) {
   .spread-row {
-    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    overflow-x: visible;
   }
-}
-
-@media (min-width: 720px) {
-  .spread-row {
-    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  .spread-row > .spread-slot {
+    flex: none;
   }
 }
 
@@ -362,47 +369,39 @@ body.paid-reading {
   background: var(--pr-bg-elevated);
   border: 1px solid var(--pr-border);
   border-radius: 12px;
-  padding: 0.75rem;
+  padding: 0.6rem 0.5rem 0.75rem;
 }
 
 .spread-slot__label {
   font-family: var(--font-display);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--pr-gold);
+  text-align: center;
+  margin-bottom: 0.25rem;
 }
 .spread-slot__hint {
-  font-size: 0.72rem;
-  color: var(--pr-muted);
-  margin-bottom: 0.5rem;
+  display: none;
 }
 
 .tarot-card {
   text-align: center;
-  padding: 0.85rem 0.5rem;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #2a261f 0%, #1a1714 100%);
-  border: 1px solid var(--pr-border);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
 }
 
 .tarot-card__face {
   position: relative;
   width: 100%;
-  max-width: 200px;
-  margin: 0 auto 0.5rem;
-  aspect-ratio: 2 / 3;
-  max-height: min(52vw, 260px);
-  border-radius: 10px;
+  margin: 0 auto 0.4rem;
+  aspect-ratio: 300 / 527;
+  border-radius: 8px;
   overflow: hidden;
   background: linear-gradient(160deg, #2e2a22 0%, #141210 100%);
   border: 1px solid rgba(61, 52, 41, 0.85);
-}
-
-@media (min-width: 480px) {
-  .tarot-card__face {
-    max-width: none;
-    max-height: 240px;
-  }
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .tarot-card__img {
@@ -410,8 +409,7 @@ body.paid-reading {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center top;
+  object-fit: contain;
   transition: opacity 0.25s ease;
 }
 
@@ -435,20 +433,9 @@ body.paid-reading {
 }
 .tarot-card__name {
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
-}
-.tarot-card__meta {
-  font-size: 0.68rem;
-  color: var(--pr-muted);
-  margin-top: 0.25rem;
-}
-.tarot-card__gist {
-  font-size: 0.72rem;
-  color: var(--pr-muted);
-  margin-top: 0.5rem;
-  line-height: 1.5;
-  text-align: left;
+  margin-top: 0.15rem;
 }
 
 /* 鑑定結果（HTML） */

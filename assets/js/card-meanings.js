@@ -99,11 +99,44 @@ export const CARD_MEANINGS = {
   },
 };
 
-const SUIT_JA = {
-  wands: "ワンド",
-  cups: "カップ",
-  swords: "ソード",
-  pentacles: "ペンタクル",
+const SUIT_INFO = {
+  wands: {
+    ja: "ワンド",
+    theme: "情熱・行動・創造",
+    desc: "火のエネルギー。意志の力、やる気、直感的な行動を示します。",
+  },
+  cups: {
+    ja: "カップ",
+    theme: "感情・愛情・人間関係",
+    desc: "水のエネルギー。心の動き、愛情、感受性を映し出します。",
+  },
+  swords: {
+    ja: "ソード",
+    theme: "思考・決断・真実",
+    desc: "風のエネルギー。理性、コミュニケーション、決断を象徴します。",
+  },
+  pentacles: {
+    ja: "ペンタクル",
+    theme: "物質・現実・安定",
+    desc: "地のエネルギー。お金、仕事、健康など現実面を示します。",
+  },
+};
+
+const RANK_MEANING = {
+  ace: "物事の始まり、新しいチャンスの種",
+  "02": "選択、バランス、二つの要素の調和",
+  "03": "成長、拡大、最初の成果",
+  "04": "安定、休息、基盤の確立",
+  "05": "試練、葛藤、変化の必要性",
+  "06": "調和、援助、与え合う関係",
+  "07": "挑戦、信念、粘り強さ",
+  "08": "動き、変化、スピード",
+  "09": "達成間近、振り返り、最終段階",
+  "10": "完結、次のサイクルへの移行",
+  page: "新しい学び、メッセージ、好奇心",
+  knight: "行動、追求、情熱的な動き",
+  queen: "受容、成熟、内なる力",
+  king: "支配、責任、完成された力",
 };
 
 /**
@@ -112,11 +145,13 @@ const SUIT_JA = {
  */
 function defaultMinorGist(id) {
   const i = id.indexOf("_");
-  if (i < 0) return "（文案未設定）";
+  if (i < 0) return "";
   const suit = id.slice(0, i);
   const rank = id.slice(i + 1);
-  const suitJa = SUIT_JA[/** @type {keyof typeof SUIT_JA} */ (suit)] || suit;
-  return `【${suitJa}】具体場面でのエネルギーの出方（${rank}）。個別の深い文案は CARD_MEANINGS["${id}"] に追記。`;
+  const info = SUIT_INFO[/** @type {keyof typeof SUIT_INFO} */ (suit)];
+  const rankDesc = RANK_MEANING[rank] || "";
+  if (!info) return "";
+  return `${info.desc}このカードは「${rankDesc}」を表し、${info.theme}の領域でそのテーマが現れています。`;
 }
 
 /**
