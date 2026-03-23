@@ -1,54 +1,22 @@
-# タロットカード画像の置き場所
+# タロットカード画像
 
-`assets/js/tarot-deck.js` の **カードID** と同じファイル名で、次のいずれかの形式を置いてください。
+このフォルダには **Rider-Waite-Smith タロット** の画像（78枚）が含まれています。
 
-- 推奨: **WebP**（軽量）— `{id}.webp`
-- 互換: **PNG / JPG** — `{id}.png` または `{id}.jpg`
+## ライセンス
 
-アプリは **webp → png → jpg → jpeg** の順で存在するファイルを自動で探します。
+- **出典**: [Rider-Waite Smith Tarot Cards (CC0)](https://luciellaes.itch.io/rider-waite-smith-tarot-cards-cc0) by Luciella Elisabeth Scarlett
+- **ライセンス**: CC0 / パブリックドメイン
+- 原画は 1909年の Rider-Waite-Smith デッキ（著作権切れ）
 
-## ファイル名一覧（78枚）
+## ファイル命名規則
 
-大アルカナ（22枚）:
+- 大アルカナ: `m00.jpg`〜`m21.jpg`
+- 小アルカナ: `{suit}_{rank}.jpg`
+  - スート: `wands`, `cups`, `swords`, `pentacles`
+  - ランク: `ace`, `02`〜`10`, `page`, `knight`, `queen`, `king`
 
-- `m00.webp` … 愚者  
-- `m01.webp` … 魔術師  
-- `m02.webp` … 女教皇  
-- `m03.webp` … 女帝  
-- `m04.webp` … 皇帝  
-- `m05.webp` … 法王  
-- `m06.webp` … 恋人  
-- `m07.webp` … 戦車  
-- `m08.webp` … 力  
-- `m09.webp` … 隠者  
-- `m10.webp` … 運命の輪  
-- `m11.webp` … 正義  
-- `m12.webp` … 吊るされた男  
-- `m13.webp` … 死  
-- `m14.webp` … 節制  
-- `m15.webp` … 悪魔  
-- `m16.webp` … 塔  
-- `m17.webp` … 星  
-- `m18.webp` … 月  
-- `m19.webp` … 太陽  
-- `m20.webp` … 審判  
-- `m21.webp` … 世界  
+## クレジット（任意）
 
-小アルカナ（各スート: エース〜10、ページ・ナイト・クイーン・キング）:
+使用時のクレジット表記は任意ですが、素材作者への感謝として以下を記載できます:
 
-スート名は `wands`（ワンド） / `cups`（カップ） / `swords`（ソード） / `pentacles`（ペンタクル）。
-
-例（ワンド）:
-
-- `wands_ace`, `wands_02` … `wands_10`
-- `wands_page`, `wands_knight`, `wands_queen`, `wands_king`
-
-同様に `cups_*`, `swords_*`, `pentacles_*` で各14枚 × 4スート = 56枚。
-
-## 著作権について
-
-商用デッキのスキャン画像を無断で配布しないようご注意ください。利用許諾のある素材、ご自身で作成した画像、パブリックドメイン／CC などライセンス明記の素材をご利用ください。
-
-## 画像がないとき
-
-画像が見つからないカードは、従来どおり **記号＋和名** のみ表示されます（エラーにはなりません）。
+> Card images: Luciella Elisabeth Scarlett (CC0)
