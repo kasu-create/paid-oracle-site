@@ -1,5 +1,6 @@
 /**
  * /oracle/reading/ — プロフィール → シャッフル → 3枚 → 再シャッフル → 5枚 → GPT鑑定
+ * GitHub 反映用: escapeHtml / buildReadingHtml は angle bracket 版を維持すること
  */
 
 import { buildFullDeck, shuffleDeck } from "./tarot-deck.js";
