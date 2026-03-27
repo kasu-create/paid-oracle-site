@@ -714,6 +714,32 @@ body.paid-reading {
   margin: 0 0 1.25rem;
 }
 
+/* GPT鑑定マークダウン用 */
+.pr-reading-h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--pr-gold);
+  margin: 1.75rem 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--pr-border);
+}
+.pr-reading-h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--pr-text);
+  margin: 1.25rem 0 0.5rem;
+}
+.pr-sec--reading strong {
+  color: var(--pr-gold);
+}
+.pr-reading-hr {
+  border: none;
+  border-top: 1px solid var(--pr-border);
+  margin: 1.5rem 0;
+}
+
 /* サマリーカード表示 */
 .summary-cards {
   margin-bottom: 1.5rem;

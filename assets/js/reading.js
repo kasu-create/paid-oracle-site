@@ -10,8 +10,8 @@ import { resolveCardImageUrl, CARD_IMAGE_EXTENSIONS } from "./card-images.js";
 // 設定
 // ========================================
 
-// GAS ウェブアプリの URL（デプロイ後に書き換える）
-const GAS_API_URL = "";
+// Cloudflare Workers タロット API
+const TAROT_API_URL = "https://tarot-api.tttttkasu.workers.dev/";
 
 // ========================================
 // ユーティリティ
@@ -183,35 +183,35 @@ function renderSummaryCards(container, threeCards, fiveCards) {
 }
 
 // ========================================
-// GPT API 呼び出し
+// GPT API 呼び出し（Cloudflare Workers経由）
 // ========================================
 
 async function callGptReading(profile, threeCards, fiveCards) {
-  if (!GAS_API_URL) {
-    // API URL 未設定時はフォールバック（テスト用）
-    return generateFallbackReading(profile, threeCards, fiveCards);
+  // テーマを悩みから自動判定
+  const concern = profile.concern || "";
+  let theme = "恋愛相談";
+  if (concern.includes("復縁") || concern.includes("元彼") || concern.includes("元カノ") || concern.includes("よりを戻")) {
+    theme = "復縁";
+  } else if (concern.includes("片想い") || concern.includes("片思い") || concern.includes("好きな人")) {
+    theme = "片思い";
+  } else if (concern.includes("音信不通") || concern.includes("連絡") || concern.includes("既読")) {
+    theme = "音信不通";
+  } else if (concern.includes("結婚") || concern.includes("プロポーズ")) {
+    theme = "結婚";
   }
 
+  // 引いたカード情報を整理
+  const allCards = [...threeCards, ...fiveCards];
+  const cardNames = allCards.map(c => c.nameJa).join("、");
+
   const payload = {
-    concern: profile.concern,
-    selfBirth: profile.selfBirth,
-    partnerBirth: profile.partnerBirth || null,
-    threeCards: threeCards.map((c) => ({
-      id: c.id,
-      nameJa: c.nameJa,
-      arcana: c.arcana,
-      suitJa: c.suitJa || null,
-    })),
-    fiveCards: fiveCards.map((c) => ({
-      id: c.id,
-      nameJa: c.nameJa,
-      arcana: c.arcana,
-      suitJa: c.suitJa || null,
-    })),
+    theme: theme,
+    relation: "不明",
+    concern: `${concern}\n\n【引いたカード】${cardNames}`
   };
 
   try {
-    const res = await fetch(GAS_API_URL, {
+    const res = await fetch(TAROT_API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -226,10 +226,13 @@ async function callGptReading(profile, threeCards, fiveCards) {
       throw new Error(data.error);
     }
 
-    return data.reading;
+    if (data.success && data.reading) {
+      return data.reading;
+    }
+
+    return generateFallbackReading(profile, threeCards, fiveCards);
   } catch (err) {
     console.error("GPT API 呼び出し失敗:", err);
-    // エラー時はフォールバック
     return generateFallbackReading(profile, threeCards, fiveCards);
   }
 }
@@ -278,20 +281,24 @@ function generateFallbackReading(profile, threeCards, fiveCards) {
 // ========================================
 
 function buildReadingHtml(readingText) {
-  // GPT の出力をパラグラフに分割して HTML 化
-  const paragraphs = readingText
-    .split(/\n\n+/)
-    .filter((p) => p.trim())
-    .map((p) => {
-      // 改行を <br> に変換
-      const lines = p.split(/\n/).map((line) => escapeHtml(line.trim())).filter(Boolean);
-      return `<p>${lines.join("<br>")}</p>`;
-    })
-    .join("");
+  // マークダウンをHTMLに変換
+  let html = readingText
+    .replace(/^## (.+)$/gm, '<h2 class="pr-reading-h2">$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3 class="pr-reading-h3">$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n---\n/g, '<hr class="pr-reading-hr">')
+    .replace(/\n\n+/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+
+  html = '<p>' + html + '</p>';
+  html = html.replace(/<p><h2/g, '<h2').replace(/<\/h2><\/p>/g, '</h2>');
+  html = html.replace(/<p><h3/g, '<h3').replace(/<\/h3><\/p>/g, '</h3>');
+  html = html.replace(/<p><hr/g, '<hr').replace(/<\/p><p><\/p>/g, '');
+  html = html.replace(/<p><\/p>/g, '');
 
   return `<div class="pr-reading-root">
     <section class="pr-sec pr-sec--reading">
-      ${paragraphs}
+      ${html}
     </section>
   </div>`;
 }
