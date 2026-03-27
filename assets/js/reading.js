@@ -54,10 +54,11 @@ function fakeShuffleDelay(ms, statusEl, message, done) {
 }
 
 function escapeHtml(s) {
+  // \u003c \u003e で記述（環境によっては < > がコミット時に欠けるのを避ける）
   return String(s)
     .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
+    .replace(/\u003c/g, "&lt;")
+    .replace(/\u003e/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
 
@@ -162,10 +163,12 @@ function renderSpread(container, definitions, cards) {
     const wrap = document.createElement("div");
     wrap.className = "spread-slot";
     wrap.setAttribute("role", "listitem");
-    wrap.innerHTML = `
-      <div class="spread-slot__label">${escapeHtml(def.label)}</div>
-      <div class="spread-slot__hint">${escapeHtml(def.hint)}</div>
-    `;
+    wrap.innerHTML =
+      "\u003cdiv class=\"spread-slot__label\"\u003e" +
+      escapeHtml(def.label) +
+      "\u003c/div\u003e\u003cdiv class=\"spread-slot__hint\"\u003e" +
+      escapeHtml(def.hint) +
+      "\u003c/div\u003e";
     wrap.appendChild(renderCardElement(card));
     container.appendChild(wrap);
   });
@@ -181,7 +184,8 @@ function renderSummaryCards(container, threeCards, fiveCards) {
   // 3枚セクション
   const threeSection = document.createElement("div");
   threeSection.className = "summary-cards__section";
-  threeSection.innerHTML = `<h4 class="summary-cards__title">3枚スプレッド</h4>`;
+  threeSection.innerHTML =
+    "\u003ch4 class=\"summary-cards__title\"\u003e3枚スプレッド\u003c/h4\u003e";
   const threeRow = document.createElement("div");
   threeRow.className = "summary-cards__row";
   SPREAD_THREE.forEach((def, i) => {
@@ -194,7 +198,8 @@ function renderSummaryCards(container, threeCards, fiveCards) {
   // 5枚セクション
   const fiveSection = document.createElement("div");
   fiveSection.className = "summary-cards__section";
-  fiveSection.innerHTML = `<h4 class="summary-cards__title">5枚スプレッド</h4>`;
+  fiveSection.innerHTML =
+    "\u003ch4 class=\"summary-cards__title\"\u003e5枚スプレッド\u003c/h4\u003e";
   const fiveRow = document.createElement("div");
   fiveRow.className = "summary-cards__row";
   SPREAD_FIVE.forEach((def, i) => {
@@ -308,26 +313,43 @@ function generateFallbackReading(profile, threeCards, fiveCards) {
 // ========================================
 
 function buildReadingHtml(readingText) {
-  // マークダウンをHTMLに変換
+  const LT = "\u003c";
+  const GT = "\u003e";
   let html = readingText
-    .replace(/^## (.+)$/gm, '<h2 class="pr-reading-h2">$1</h2>')
-    .replace(/^### (.+)$/gm, '<h3 class="pr-reading-h3">$1</h3>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n---\n/g, '<hr class="pr-reading-hr">')
-    .replace(/\n\n+/g, '</p><p>')
-    .replace(/\n/g, '<br>');
+    .replace(/^## (.+)$/gm, (_, a) => LT + 'h2 class="pr-reading-h2"' + GT + a + LT + "/h2" + GT)
+    .replace(/^### (.+)$/gm, (_, a) => LT + 'h3 class="pr-reading-h3"' + GT + a + LT + "/h3" + GT)
+    .replace(/\*\*(.+?)\*\*/g, (_, a) => LT + "strong" + GT + a + LT + "/strong" + GT)
+    .replace(/\n---\n/g, LT + 'hr class="pr-reading-hr"' + GT)
+    .replace(/\n\n+/g, LT + "/p" + GT + LT + "p" + GT)
+    .replace(/\n/g, LT + "br" + GT);
 
-  html = '<p>' + html + '</p>';
-  html = html.replace(/<p><h2/g, '<h2').replace(/<\/h2><\/p>/g, '</h2>');
-  html = html.replace(/<p><h3/g, '<h3').replace(/<\/h3><\/p>/g, '</h3>');
-  html = html.replace(/<p><hr/g, '<hr').replace(/<\/p><p><\/p>/g, '');
-  html = html.replace(/<p><\/p>/g, '');
+  html = LT + "p" + GT + html + LT + "/p" + GT;
+  html = html
+    .replace(LT + "p" + GT + LT + "h2", LT + "h2")
+    .replace(LT + "/h2" + GT + LT + "/p" + GT, LT + "/h2" + GT);
+  html = html
+    .replace(LT + "p" + GT + LT + "h3", LT + "h3")
+    .replace(LT + "/h3" + GT + LT + "/p" + GT, LT + "/h3" + GT);
+  html = html
+    .replace(LT + "p" + GT + LT + "hr", LT + "hr")
+    .replace(LT + "/p" + GT + LT + "p" + GT + LT + "/p" + GT, "");
+  html = html.replace(LT + "p" + GT + LT + "/p" + GT, "");
 
-  return `<div class="pr-reading-root">
-    <section class="pr-sec pr-sec--reading">
-      ${html}
-    </section>
-  </div>`;
+  return (
+    LT +
+    'div class="pr-reading-root"' +
+    GT +
+    LT +
+    'section class="pr-sec pr-sec--reading"' +
+    GT +
+    html +
+    LT +
+    "/section" +
+    GT +
+    LT +
+    "/div" +
+    GT
+  );
 }
 
 // ========================================
@@ -436,12 +458,11 @@ function wireButtons() {
     
     // ローディング表示
     if (box) {
-      box.innerHTML = `
-        <div class="pr-loading">
-          <div class="pr-loading__spinner"></div>
-          <p class="pr-loading__text">れんが鑑定中…少し待っててね</p>
-        </div>
-      `;
+      box.innerHTML =
+        "\u003cdiv class=\"pr-loading\"\u003e" +
+        "\u003cdiv class=\"pr-loading__spinner\"\u003e\u003c/div\u003e" +
+        "\u003cp class=\"pr-loading__text\"\u003eれんが鑑定中…少し待っててね\u003c/p\u003e" +
+        "\u003c/div\u003e";
     }
     
     showPhase("phase-summary");
