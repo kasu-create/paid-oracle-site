@@ -1,0 +1,12 @@
+【れんの恋愛タロット｜鑑定ページ】
+
+以下のURLから、アクセスコードを入力してお進みください。
+
+■ 鑑定ページ（こちらを開いてください）
+https://kasu-create.github.io/paid-oracle-site/oracle/reading/gate.html
+
+■ アクセスコード（パスワード）
+（ここに Cloudflare の PAID_READING_PASSWORD と同じ文字列を記載）
+
+※ コードは第三者と共有しないでください。
+※ 入力後、しばらくの間は同じブラウザで鑑定を続けられます（期限切れの場合は再度コード入力が必要です）。

@@ -1,0 +1,25 @@
+【今のエラーの原因（Cursor内ブラウザで確認済み）】
+
+1) gate.html が GitHub に無い
+   → https://kasu-create.github.io/.../gate.html が 404 になる
+
+2) GitHub 上の assets/js/reading.js が壊れている
+   → escapeHtml が「<」ではなくスペースを置換するなど、公開版がデスクトップ版と違う
+
+【やること：GitHub Desktop】
+
+paid-oracle-site を開いて、次を必ずコミット＆プッシュする：
+
+  □ oracle/reading/gate.html
+  □ assets/js/reading.js  （デスクトップのこの内容で上書き済みならそのまま）
+  □ assets/css/paid-reading.css （.pr-reading-h2 など入っている版）
+  □ workers/tarot-api-with-paid-gate.js （バックアップ・参照用でOK）
+
+プッシュ後、2〜5分待ってから開く：
+
+  https://kasu-create.github.io/paid-oracle-site/oracle/reading/gate.html
+
+【Cloudflare】
+
+Worker に PAID_READING_PASSWORD と PAID_READING_SIGNING_SECRET が無いと
+verify が 503 になる。Settings → Variables を確認。

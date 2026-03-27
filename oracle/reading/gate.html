@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0c0b0a" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>購入者アクセス｜れんの恋愛タロット</title>
+  <link rel="stylesheet" href="../../assets/css/paid-reading.css" />
+  <style>
+    .pr-gate-box { max-width: 26rem; margin: 0 auto; }
+    .pr-gate-box p { color: var(--pr-muted); font-size: 0.9rem; line-height: 1.75; margin: 0 0 1rem; }
+    .pr-gate-error { color: var(--pr-danger); font-size: 0.85rem; min-height: 1.25rem; margin: 0.5rem 0 0; }
+  </style>
+</head>
+<body class="paid-reading">
+  <header class="pr-header">
+    <p class="pr-header__badge">REN'S TAROT</p>
+    <h1 class="pr-header__title">購入者専用アクセス</h1>
+    <p class="pr-header__sub">STORES ご購入後にお届けしたアクセスコードを入力してください。</p>
+  </header>
+
+  <main class="pr-main">
+    <section class="pr-panel pr-gate-box">
+      <h2>アクセスコード</h2>
+      <div class="pr-form-grid">
+        <label class="pr-field">
+          <span>コード（パスワード）</span>
+          <input type="password" id="gate-password" class="pr-textarea" style="min-height: var(--pr-touch-min);" autocomplete="current-password" placeholder="購入完了メール・ページに記載のコード" />
+        </label>
+      </div>
+      <p id="gate-error" class="pr-gate-error" role="alert" aria-live="assertive"></p>
+      <button type="button" class="pr-btn" id="gate-submit">鑑定ページを開く</button>
+      <p class="pr-footer-note" style="margin-top: 1.25rem; text-align: left;">
+        コードをお持ちでない方は <a href="https://lp8hnyu9ebgefokdjdyh.stores.jp/" target="_blank" rel="noopener noreferrer" style="color: var(--pr-accent);">STORES</a> からご購入ください。
+      </p>
+    </section>
+  </main>
+
+  <script>
+(function () {
+  var TOKEN_KEY = "pr_paid_reading_token_v1";
+  var VERIFY_URL = "https://tarot-api.tttttkasu.workers.dev/verify-paid-access";
+
+  function getRedirectTarget() {
+    var p = new URLSearchParams(location.search);
+    var r = p.get("redirect");
+    if (r && r.indexOf("gate.html") === -1) return r;
+    return "index.html";
+  }
+
+  function setError(msg) {
+    var el = document.getElementById("gate-error");
+    if (el) el.textContent = msg || "";
+  }
+
+  document.getElementById("gate-submit").addEventListener("click", async function () {
+    var input = document.getElementById("gate-password");
+    var password = (input && input.value) ? input.value.trim() : "";
+    setError("");
+    if (!password) {
+      setError("アクセスコードを入力してください。");
+      return;
+    }
+    try {
+      var res = await fetch(VERIFY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: password })
+      });
+      var data = await res.json().catch(function () { return {}; });
+      if (!res.ok || !data.ok || !data.token) {
+        setError(data.error || "コードが正しくないか、サーバーで確認できませんでした。");
+        return;
+      }
+      sessionStorage.setItem(TOKEN_KEY, data.token);
+      location.replace(getRedirectTarget());
+    } catch (e) {
+      setError("通信に失敗しました。しばらくしてから再度お試しください。");
+    }
+  });
+})();
+  </script>
+</body>
+</html>

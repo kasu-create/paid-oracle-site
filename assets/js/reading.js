@@ -10,8 +10,9 @@ import { resolveCardImageUrl, CARD_IMAGE_EXTENSIONS } from "./card-images.js";
 // 設定
 // ========================================
 
-// Cloudflare Workers タロット API
-const TAROT_API_URL = "https://tarot-api.tttttkasu.workers.dev/";
+// 有料鑑定: トークン必須エンドポイント（Worker の /paid-reading）
+const TAROT_PAID_API_URL = "https://tarot-api.tttttkasu.workers.dev/paid-reading";
+const PAID_TOKEN_KEY = "pr_paid_reading_token_v1";
 
 // ========================================
 // ユーティリティ
@@ -69,6 +70,27 @@ function parseISODate(str) {
   if (!str || !/^\d{4}-\d{2}-\d{2}$/.test(str)) return null;
   const d = new Date(str + "T12:00:00");
   return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function getPaidTokenExpiryUnix(token) {
+  const n = Number(String(token || "").split(".")[0]);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function hasValidPaidAccessToken() {
+  const t = sessionStorage.getItem(PAID_TOKEN_KEY);
+  if (!t) return false;
+  if (Date.now() / 1000 > getPaidTokenExpiryUnix(t)) {
+    sessionStorage.removeItem(PAID_TOKEN_KEY);
+    return false;
+  }
+  return true;
+}
+
+function redirectToPaidGate() {
+  const qs = new URLSearchParams();
+  qs.set("redirect", location.pathname + location.search + location.hash);
+  location.replace("gate.html?" + qs.toString());
 }
 
 // ========================================
@@ -210,10 +232,14 @@ async function callGptReading(profile, threeCards, fiveCards) {
     concern: `${concern}\n\n【引いたカード】${cardNames}`
   };
 
+  const accessToken = sessionStorage.getItem(PAID_TOKEN_KEY);
   try {
-    const res = await fetch(TAROT_API_URL, {
+    const res = await fetch(TAROT_PAID_API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken ? { Authorization: "Bearer " + accessToken } : {}),
+      },
       body: JSON.stringify(payload),
     });
 
@@ -429,8 +455,12 @@ function wireButtons() {
 }
 
 // ========================================
-// 初期化
+// 初期化（購入者トークンが無い場合はゲートへ）
 // ========================================
 
-showPhase("phase-intro");
-wireButtons();
+if (!hasValidPaidAccessToken()) {
+  redirectToPaidGate();
+} else {
+  showPhase("phase-intro");
+  wireButtons();
+}
