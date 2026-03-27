@@ -54,22 +54,46 @@
 
     <section id="phase-three" class="pr-panel phase is-hidden" data-phase="three" hidden>
       <h2>3枚のカード</h2>
-      <p class="pr-panel__lead">いまの状況・壁になっているもの・乗り越えるヒント、の3つだよ。</p>
+      <p class="pr-panel__lead">あなたの「いま」を3つの角度から見てみたよ。</p>
       <div id="spread-three" class="spread-row" role="list"></div>
-      <button type="button" class="pr-btn" id="btn-to-five">残りをシャッフルして 5枚を引く</button>
+      <div class="pr-next-guide">
+        <p class="pr-next-guide__text">カードを確認できたら、次へ進もう</p>
+        <p class="pr-next-guide__arrow">↓</p>
+      </div>
+      <button type="button" class="pr-btn" id="btn-to-five">もう少し深く見る（5枚を引く）</button>
       <p id="shuffle-five" class="pr-shuffle-msg" aria-live="polite"></p>
     </section>
 
     <section id="phase-five" class="pr-panel phase is-hidden" data-phase="five" hidden>
       <h2>5枚のカード</h2>
-      <p class="pr-panel__lead">もっと深いところまで読み解いていくね。</p>
+      <p class="pr-panel__lead">さらに深い層を掘り下げてみるね。</p>
       <div id="spread-five" class="spread-row" role="list"></div>
-      <button type="button" class="pr-btn" id="btn-finish">鑑定文を表示する</button>
+      <div class="pr-next-guide">
+        <p class="pr-next-guide__text">全部見れた？いよいよ鑑定だよ</p>
+        <p class="pr-next-guide__arrow">↓</p>
+      </div>
+      <button type="button" class="pr-btn pr-btn--primary" id="btn-finish">れんの鑑定を読む</button>
     </section>
 
     <section id="phase-summary" class="pr-panel phase is-hidden" data-phase="summary" hidden>
-      <h2>れんからのメッセージ</h2>
+      <h2>れんからの鑑定</h2>
+      <div id="summary-cards" class="summary-cards"></div>
       <div id="summary-body" class="summary-box"></div>
+
+      <div class="pr-backend-cta">
+        <div class="pr-backend-cta__inner">
+          <p class="pr-backend-cta__badge">もっと深く知りたいあなたへ</p>
+          <h3 class="pr-backend-cta__title">恋愛相談セッション</h3>
+          <p class="pr-backend-cta__desc">カードの結果をもとに、れんが直接あなたの悩みに答えるよ。LINE通話 or チャットで、30分間じっくり話そう。</p>
+          <ul class="pr-backend-cta__points">
+            <li>今日のカードをもとにした深掘りアドバイス</li>
+            <li>相手への具体的なアプローチ方法</li>
+            <li>いま一番やるべきことの整理</li>
+          </ul>
+          <a href="#" class="pr-btn pr-btn--backend" id="btn-backend">セッションについて見る</a>
+        </div>
+      </div>
+
     </section>
   </main>
 

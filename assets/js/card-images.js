@@ -6,7 +6,7 @@
 import { buildFullDeck } from "./tarot-deck.js";
 
 /** 試す順（先に見つかった拡張子を使用） */
-export const CARD_IMAGE_EXTENSIONS = ["jpg", "webp", "png", "jpeg"];
+export const CARD_IMAGE_EXTENSIONS = ["svg", "jpg", "webp", "png", "jpeg"];
 
 /**
  * @param {string} cardId 例: m00, wands_ace

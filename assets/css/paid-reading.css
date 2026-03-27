@@ -549,6 +549,237 @@ body.paid-reading {
   display: none !important;
 }
 
+/* 導線ガイド */
+.pr-next-guide {
+  text-align: center;
+  margin: 1.5rem 0 0.75rem;
+  padding: 1rem 0;
+}
+.pr-next-guide__text {
+  font-size: 0.95rem;
+  color: var(--pr-gold);
+  margin: 0 0 0.25rem;
+  font-weight: 500;
+}
+.pr-next-guide__arrow {
+  font-size: 1.5rem;
+  color: var(--pr-gold-dim);
+  margin: 0;
+  animation: bounce 1.2s ease infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ボタンバリエーション */
+.pr-btn--primary {
+  background: linear-gradient(135deg, #f0d060, var(--pr-gold));
+  font-size: 1.1rem;
+  padding: 1rem 1.5rem;
+}
+.pr-btn--secondary {
+  background: transparent;
+  border: 1px solid var(--pr-border);
+  color: var(--pr-text);
+}
+.pr-btn--secondary:hover:not(:disabled) {
+  background: var(--pr-bg-elevated);
+  border-color: var(--pr-gold-dim);
+}
+.pr-btn--backend {
+  background: linear-gradient(135deg, #ff8a65, #ff5722);
+  color: #fff;
+  font-size: 1rem;
+}
+.pr-btn--backend:hover:not(:disabled) {
+  box-shadow: 0 8px 24px rgba(255, 87, 34, 0.35);
+}
+
+/* バックエンドCTA */
+.pr-backend-cta {
+  margin: 2.5rem 0 2rem;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--pr-gold), #ff8a65, var(--pr-gold-dim));
+  border-radius: 16px;
+}
+.pr-backend-cta__inner {
+  background: var(--pr-bg);
+  border-radius: 14px;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+}
+.pr-backend-cta__badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--pr-gold);
+  background: rgba(212, 175, 55, 0.12);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.04em;
+}
+.pr-backend-cta__title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--pr-text);
+  margin: 0 0 0.5rem;
+}
+.pr-backend-cta__desc {
+  font-size: 0.9rem;
+  color: var(--pr-muted);
+  margin: 0 0 1rem;
+  line-height: 1.7;
+}
+.pr-backend-cta__points {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  text-align: left;
+}
+.pr-backend-cta__points li {
+  position: relative;
+  padding-left: 1.4rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--pr-text);
+}
+.pr-backend-cta__points li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--pr-gold);
+  font-weight: 700;
+}
+
+/* シェア・リトライボックス */
+.pr-share-box {
+  text-align: center;
+  margin: 2rem 0 0;
+  padding: 1.5rem 1rem;
+  background: var(--pr-bg-elevated);
+  border-radius: 12px;
+  border: 1px solid var(--pr-border);
+}
+.pr-share-box__text {
+  font-size: 0.9rem;
+  color: var(--pr-muted);
+  margin: 0 0 0.75rem;
+}
+
+/* 鑑定文のブロック改善 */
+.pr-card-block {
+  background: var(--pr-bg-elevated);
+  border: 1px solid var(--pr-border);
+  border-left: 3px solid var(--pr-gold);
+  border-radius: 0 10px 10px 0;
+  padding: 1.1rem 1.15rem 1.2rem;
+  margin-bottom: 1.25rem;
+}
+.pr-card-block p {
+  font-size: 0.9rem;
+  line-height: 1.85;
+  margin: 0 0 0.9rem;
+  color: var(--pr-text);
+}
+.pr-card-block p:last-child {
+  margin-bottom: 0;
+}
+
+/* セクション見出しの強調 */
+.pr-sec h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--pr-gold);
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--pr-border);
+  letter-spacing: 0.06em;
+}
+
+/* まとめセクションのスタイル */
+.pr-sec p {
+  font-size: 0.92rem;
+  line-height: 1.9;
+  margin: 0 0 1rem;
+  color: var(--pr-text);
+}
+
+.pr-sec--reading p {
+  font-size: 0.95rem;
+  line-height: 2;
+  margin: 0 0 1.25rem;
+}
+
+/* サマリーカード表示 */
+.summary-cards {
+  margin-bottom: 1.5rem;
+}
+.summary-cards__section {
+  margin-bottom: 1.25rem;
+}
+.summary-cards__title {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--pr-gold);
+  margin: 0 0 0.75rem;
+  padding-left: 0.25rem;
+}
+.summary-cards__row {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.5rem;
+}
+.summary-cards__row .tarot-card {
+  flex: 0 0 100px;
+  scroll-snap-align: start;
+}
+.summary-cards__row .tarot-card__face {
+  aspect-ratio: 300 / 527;
+}
+.summary-cards__row .tarot-card__name {
+  font-size: 0.72rem;
+}
+.summary-cards__row .tarot-card__label {
+  font-size: 0.65rem;
+  color: var(--pr-muted);
+  margin-top: 0.15rem;
+}
+
+/* ローディング */
+.pr-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+.pr-loading__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--pr-border);
+  border-top-color: var(--pr-gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.pr-loading__text {
+  font-size: 0.9rem;
+  color: var(--pr-muted);
+  margin: 0;
+}
+
 @media print {
   body.paid-reading {
     background: #fff;
@@ -560,7 +791,10 @@ body.paid-reading {
   .pr-footer-note,
   .pr-token,
   .pr-btn,
-  .pr-back {
+  .pr-back,
+  .pr-backend-cta,
+  .pr-share-box,
+  .pr-next-guide {
     display: none !important;
   }
   .pr-panel,
